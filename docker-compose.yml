@@ -1,0 +1,22 @@
+version: "3"
+networks:
+  forum.net:
+    driver: bridge
+
+services:
+  bdd:
+    image: mariadb
+    networks:
+      - forum.net
+    ports:
+      - "3310:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD : ${MARIADB_ROOT_PASSWORD:-password}
+      MARIADB_DATABASE : forum
+
+  adminer:
+    image: adminer
+    networks:
+      - forum.net
+    ports:
+      - "8006:8080"

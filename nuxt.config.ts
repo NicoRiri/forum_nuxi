@@ -12,6 +12,7 @@ export default defineNuxtConfig({
         config.plugins.push(vuetify({autoImport: true}))
       })
     },
+    '@sidebase/nuxt-session'
   ],
     vite: {
   vue: {

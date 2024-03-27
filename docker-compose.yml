@@ -4,6 +4,17 @@ networks:
     driver: bridge
 
 services:
+#  nuxt:
+#    build:
+#      context: ./
+#      dockerfile: docker/nuxt
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - ./:/app
+#    command: [ "npm", "run", "dev" ]
+
+
   bdd:
     image: mariadb
     networks:

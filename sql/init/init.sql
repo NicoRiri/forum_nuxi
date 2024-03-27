@@ -39,6 +39,15 @@ CREATE TABLE `Sujets` (
   CONSTRAINT `Sujets_ibfk_1` FOREIGN KEY (`forum_id`) REFERENCES `Forums` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `Users`;
+CREATE TABLE `Users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(250) NOT NULL,
+  `password` varchar(250) NOT NULL,
+  `admin` bit(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 -- 2024-03-27 14:13:16
 
@@ -1169,6 +1178,11 @@ INSERT INTO `Sujets` (`id`, `forum_id`, `nom`, `message_initial`) VALUES
 (98,	8,	'Sujet 10 - Forum 8',	'Message initial du sujet 10 - Forum 8'),
 (99,	9,	'Sujet 10 - Forum 9',	'Message initial du sujet 10 - Forum 9'),
 (100,	10,	'Sujet 10 - Forum 10',	'Message initial du sujet 10 - Forum 10');
+
+
+INSERT INTO `Users` (`id`, `nom`, `password`, `admin`) VALUES
+(1,	'brozer',	'$2y$10$5k4rTczAKP1P.GhalJzIJuY.Za8/NX5WABEPDmX6ZfNe7MoxYGaqy',	CONV('0', 2, 10) + 0),
+(2,	'admin',	'$2y$10$SolbpHXV9i/MsB3enCXGbeDP7MBzY5kKxoijiqYM8BD9KsRPkKdGG',	CONV('1', 2, 10) + 0);
 
 -- 2024-03-27 14:13:34
 

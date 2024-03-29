@@ -11,6 +11,8 @@ export default defineEventHandler(async (event) => {
 
     setResponseStatus(event, 200)
     return {
-        "res" : nbPage
+        "nbPage" : nbPage,
+        // @ts-ignore
+        "nb":rowsCount[0].nb
     }
 })

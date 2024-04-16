@@ -10,9 +10,10 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "bcrypt": "^5.1.1",
     "bluebird": "^3.7.2",
     "mysql2": "^3.9.3",
-    "@mdi/font": "^7.4.47",
     "nuxt": "^3.11.1",
     "nuxt-server-utils": "^0.0.7",
     "vue": "^3.4.21",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@sidebase/nuxt-session": "^0.2.8",
+    "@types/bluebird": "^3.5.42",
     "vite-plugin-vuetify": "^2.0.3",
     "vuetify": "^3.5.12",
     "@types/bluebird": "^3.5.42"

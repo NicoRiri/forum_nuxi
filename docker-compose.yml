@@ -4,6 +4,17 @@ networks:
     driver: bridge
 
 services:
+#  nuxt:
+#    build:
+#      context: ./
+#      dockerfile: docker/nuxt
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - ./:/app
+#    command: [ "npm", "run", "dev" ]
+
+
   bdd:
     image: mariadb
     networks:
@@ -12,7 +23,11 @@ services:
       - "3310:3306"
     environment:
       MARIADB_ROOT_PASSWORD : ${MARIADB_ROOT_PASSWORD:-password}
+      MARIADB_USER : ${MARIADB_USER:-user}
+      MARIADB_PASSWORD : ${MARIADB_PASSWORD:-password}
       MARIADB_DATABASE : forum
+    volumes:
+      -  ./sql/init:/docker-entrypoint-initdb.d
 
   adminer:
     image: adminer

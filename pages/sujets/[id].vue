@@ -4,10 +4,10 @@ const idForum = ref(route.params.id)
 const data = ref()
 const page = ref(1)
 const nbpage = ref()
+const error = ref("")
 const {session, refresh, update, reset} = await useSession()
-await update({"userid": 10})
 const connected = ref(false)
-if (session.value.userid) {
+if (session.value!.userid) {
   connected.value = true
 }
 
@@ -18,9 +18,16 @@ function fetchSujet() {
   })
 }
 
+function toNewSujet() {
+  if (connected.value) {
+    navigateTo("/newSujet/" + idForum)
+  } else {
+    error.value = "Veuillez vous connecter"
+  }
+}
 
 onMounted(() => {
-  //fetchSujet()
+  fetchSujet()
 })
 
 </script>
@@ -29,15 +36,18 @@ onMounted(() => {
   <div>
     <h1>Sujets</h1>
     <router-link to="/forums">
-      <v-btn class="text-cyan-darken-1">
+      <v-btn class="text-cyan-darken-1 ml-3">
         Retour vers les forums
       </v-btn>
     </router-link>
-    <router-link :to="'/newSujet/'+idForum" v-show="connected">
-      <v-btn class="float-right mr-3 text-deep-orange-darken-2">
+    <div class="float-right mr-3">
+      <v-btn class="text-deep-orange-darken-2" @click="toNewSujet">
         Nouveau Sujet
       </v-btn>
-    </router-link>
+      <p class="text-red-darken-1 mt-3">
+        {{ error }}
+      </p>
+    </div>
     <v-card v-for="d in data"
             class="text-center mt-8  mx-auto mb-5"
             border="opacity-50 sm"

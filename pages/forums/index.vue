@@ -33,13 +33,13 @@ onMounted(() => {
             max-width="360"
             rounded="xl"
             variant="text">
-      <router-link :to="'sujet/'+d.id"
+      <router-link :to="'sujets/'+d.id"
                    class="text-decoration-none text-cyan-darken-1">
         <v-card-text class="text-h5 font-weight-black">{{ d.name }}</v-card-text>
       </router-link>
     </v-card>
 
-    <v-pagination v-model="page" :length="nbpage" @click="fetchForums"></v-pagination>
+    <v-pagination v-show="nbpage > 1" v-model="page" :length="nbpage" @click="fetchForums"></v-pagination>
   </div>
 </template>
 

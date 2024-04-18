@@ -11,7 +11,7 @@ function connexion() {
     return
   }
   $fetch('/api/connexion', {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Basic ' + btoa(login.value + ':' + password.value)

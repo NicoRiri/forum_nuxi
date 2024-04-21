@@ -6,10 +6,14 @@ networks:
 services:
 #  nuxt:
 #    build:
-#      context: ./
+#      context: .
 #      dockerfile: docker/nuxt
+#    environment:
+#      user : ${MARIADB_USER:-user}
+#      password : ${MARIADB_PASSWORD:-password}
 #    ports:
 #      - "3000:3000"
+#    working_dir: /app
 #    volumes:
 #      - ./:/app
 #    command: [ "npm", "run", "dev" ]

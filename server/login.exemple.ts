@@ -1,7 +1,7 @@
 export default {
-    host: "localhost",
+    host: "bdd",
     port: 3310,
-    user:"root",
-    password:"password",
+    user: process.env.user,
+    password: process.env.password,
     database: "forum"
 }

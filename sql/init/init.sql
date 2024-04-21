@@ -14,6 +14,17 @@ CREATE TABLE `Forums` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT INTO `Forums` (`id`, `name`) VALUES
+(1,	'Forum 1'),
+(2,	'Forum 2'),
+(3,	'Forum 3'),
+(4,	'Forum 4'),
+(5,	'Forum 5'),
+(6,	'Forum 6'),
+(7,	'Forum 7'),
+(8,	'Forum 8'),
+(9,	'Forum 9'),
+(10,	'Forum 10');
 
 DROP TABLE IF EXISTS `Messages`;
 CREATE TABLE `Messages` (
@@ -26,54 +37,6 @@ CREATE TABLE `Messages` (
   KEY `sujet_id` (`sujet_id`),
   CONSTRAINT `Messages_ibfk_1` FOREIGN KEY (`sujet_id`) REFERENCES `Sujets` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-DROP TABLE IF EXISTS `Sujets`;
-CREATE TABLE `Sujets` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `forum_id` int(11) DEFAULT NULL,
-  `nom` varchar(255) DEFAULT NULL,
-  `message_initial` text DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `forum_id` (`forum_id`),
-  CONSTRAINT `Sujets_ibfk_1` FOREIGN KEY (`forum_id`) REFERENCES `Forums` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-DROP TABLE IF EXISTS `Users`;
-CREATE TABLE `Users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nom` varchar(250) NOT NULL,
-  `password` varchar(250) NOT NULL,
-  `admin` bit(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
--- 2024-03-27 14:13:16
-
-
-
-
--- Adminer 4.8.1 MySQL 11.1.2-MariaDB-1:11.1.2+maria~ubu2204 dump
-
-SET NAMES utf8;
-SET time_zone = '+00:00';
-SET foreign_key_checks = 0;
-SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
-
-SET NAMES utf8mb4;
-
-INSERT INTO `Forums` (`id`, `name`) VALUES
-(1,	'Forum 1'),
-(2,	'Forum 2'),
-(3,	'Forum 3'),
-(4,	'Forum 4'),
-(5,	'Forum 5'),
-(6,	'Forum 6'),
-(7,	'Forum 7'),
-(8,	'Forum 8'),
-(9,	'Forum 9'),
-(10,	'Forum 10');
 
 INSERT INTO `Messages` (`id`, `sujet_id`, `timestamp`, `user_id`, `contenu`) VALUES
 (1,	1,	'2024-03-27 12:42:54',	3,	'Message 1 du sujet 1'),
@@ -1077,113 +1040,132 @@ INSERT INTO `Messages` (`id`, `sujet_id`, `timestamp`, `user_id`, `contenu`) VAL
 (999,	100,	'2024-03-27 14:02:54',	10,	'Message 9 du sujet 100'),
 (1000,	100,	'2024-03-27 14:12:54',	1,	'Message 10 du sujet 100');
 
-INSERT INTO `Sujets` (`id`, `forum_id`, `nom`, `message_initial`) VALUES
-(1,	1,	'Sujet 1 - Forum 1',	'Message initial du sujet 1 - Forum 1'),
-(2,	2,	'Sujet 1 - Forum 2',	'Message initial du sujet 1 - Forum 2'),
-(3,	3,	'Sujet 1 - Forum 3',	'Message initial du sujet 1 - Forum 3'),
-(4,	4,	'Sujet 1 - Forum 4',	'Message initial du sujet 1 - Forum 4'),
-(5,	5,	'Sujet 1 - Forum 5',	'Message initial du sujet 1 - Forum 5'),
-(6,	6,	'Sujet 1 - Forum 6',	'Message initial du sujet 1 - Forum 6'),
-(7,	7,	'Sujet 1 - Forum 7',	'Message initial du sujet 1 - Forum 7'),
-(8,	8,	'Sujet 1 - Forum 8',	'Message initial du sujet 1 - Forum 8'),
-(9,	9,	'Sujet 1 - Forum 9',	'Message initial du sujet 1 - Forum 9'),
-(10,	10,	'Sujet 1 - Forum 10',	'Message initial du sujet 1 - Forum 10'),
-(11,	1,	'Sujet 2 - Forum 1',	'Message initial du sujet 2 - Forum 1'),
-(12,	2,	'Sujet 2 - Forum 2',	'Message initial du sujet 2 - Forum 2'),
-(13,	3,	'Sujet 2 - Forum 3',	'Message initial du sujet 2 - Forum 3'),
-(14,	4,	'Sujet 2 - Forum 4',	'Message initial du sujet 2 - Forum 4'),
-(15,	5,	'Sujet 2 - Forum 5',	'Message initial du sujet 2 - Forum 5'),
-(16,	6,	'Sujet 2 - Forum 6',	'Message initial du sujet 2 - Forum 6'),
-(17,	7,	'Sujet 2 - Forum 7',	'Message initial du sujet 2 - Forum 7'),
-(18,	8,	'Sujet 2 - Forum 8',	'Message initial du sujet 2 - Forum 8'),
-(19,	9,	'Sujet 2 - Forum 9',	'Message initial du sujet 2 - Forum 9'),
-(20,	10,	'Sujet 2 - Forum 10',	'Message initial du sujet 2 - Forum 10'),
-(21,	1,	'Sujet 3 - Forum 1',	'Message initial du sujet 3 - Forum 1'),
-(22,	2,	'Sujet 3 - Forum 2',	'Message initial du sujet 3 - Forum 2'),
-(23,	3,	'Sujet 3 - Forum 3',	'Message initial du sujet 3 - Forum 3'),
-(24,	4,	'Sujet 3 - Forum 4',	'Message initial du sujet 3 - Forum 4'),
-(25,	5,	'Sujet 3 - Forum 5',	'Message initial du sujet 3 - Forum 5'),
-(26,	6,	'Sujet 3 - Forum 6',	'Message initial du sujet 3 - Forum 6'),
-(27,	7,	'Sujet 3 - Forum 7',	'Message initial du sujet 3 - Forum 7'),
-(28,	8,	'Sujet 3 - Forum 8',	'Message initial du sujet 3 - Forum 8'),
-(29,	9,	'Sujet 3 - Forum 9',	'Message initial du sujet 3 - Forum 9'),
-(30,	10,	'Sujet 3 - Forum 10',	'Message initial du sujet 3 - Forum 10'),
-(31,	1,	'Sujet 4 - Forum 1',	'Message initial du sujet 4 - Forum 1'),
-(32,	2,	'Sujet 4 - Forum 2',	'Message initial du sujet 4 - Forum 2'),
-(33,	3,	'Sujet 4 - Forum 3',	'Message initial du sujet 4 - Forum 3'),
-(34,	4,	'Sujet 4 - Forum 4',	'Message initial du sujet 4 - Forum 4'),
-(35,	5,	'Sujet 4 - Forum 5',	'Message initial du sujet 4 - Forum 5'),
-(36,	6,	'Sujet 4 - Forum 6',	'Message initial du sujet 4 - Forum 6'),
-(37,	7,	'Sujet 4 - Forum 7',	'Message initial du sujet 4 - Forum 7'),
-(38,	8,	'Sujet 4 - Forum 8',	'Message initial du sujet 4 - Forum 8'),
-(39,	9,	'Sujet 4 - Forum 9',	'Message initial du sujet 4 - Forum 9'),
-(40,	10,	'Sujet 4 - Forum 10',	'Message initial du sujet 4 - Forum 10'),
-(41,	1,	'Sujet 5 - Forum 1',	'Message initial du sujet 5 - Forum 1'),
-(42,	2,	'Sujet 5 - Forum 2',	'Message initial du sujet 5 - Forum 2'),
-(43,	3,	'Sujet 5 - Forum 3',	'Message initial du sujet 5 - Forum 3'),
-(44,	4,	'Sujet 5 - Forum 4',	'Message initial du sujet 5 - Forum 4'),
-(45,	5,	'Sujet 5 - Forum 5',	'Message initial du sujet 5 - Forum 5'),
-(46,	6,	'Sujet 5 - Forum 6',	'Message initial du sujet 5 - Forum 6'),
-(47,	7,	'Sujet 5 - Forum 7',	'Message initial du sujet 5 - Forum 7'),
-(48,	8,	'Sujet 5 - Forum 8',	'Message initial du sujet 5 - Forum 8'),
-(49,	9,	'Sujet 5 - Forum 9',	'Message initial du sujet 5 - Forum 9'),
-(50,	10,	'Sujet 5 - Forum 10',	'Message initial du sujet 5 - Forum 10'),
-(51,	1,	'Sujet 6 - Forum 1',	'Message initial du sujet 6 - Forum 1'),
-(52,	2,	'Sujet 6 - Forum 2',	'Message initial du sujet 6 - Forum 2'),
-(53,	3,	'Sujet 6 - Forum 3',	'Message initial du sujet 6 - Forum 3'),
-(54,	4,	'Sujet 6 - Forum 4',	'Message initial du sujet 6 - Forum 4'),
-(55,	5,	'Sujet 6 - Forum 5',	'Message initial du sujet 6 - Forum 5'),
-(56,	6,	'Sujet 6 - Forum 6',	'Message initial du sujet 6 - Forum 6'),
-(57,	7,	'Sujet 6 - Forum 7',	'Message initial du sujet 6 - Forum 7'),
-(58,	8,	'Sujet 6 - Forum 8',	'Message initial du sujet 6 - Forum 8'),
-(59,	9,	'Sujet 6 - Forum 9',	'Message initial du sujet 6 - Forum 9'),
-(60,	10,	'Sujet 6 - Forum 10',	'Message initial du sujet 6 - Forum 10'),
-(61,	1,	'Sujet 7 - Forum 1',	'Message initial du sujet 7 - Forum 1'),
-(62,	2,	'Sujet 7 - Forum 2',	'Message initial du sujet 7 - Forum 2'),
-(63,	3,	'Sujet 7 - Forum 3',	'Message initial du sujet 7 - Forum 3'),
-(64,	4,	'Sujet 7 - Forum 4',	'Message initial du sujet 7 - Forum 4'),
-(65,	5,	'Sujet 7 - Forum 5',	'Message initial du sujet 7 - Forum 5'),
-(66,	6,	'Sujet 7 - Forum 6',	'Message initial du sujet 7 - Forum 6'),
-(67,	7,	'Sujet 7 - Forum 7',	'Message initial du sujet 7 - Forum 7'),
-(68,	8,	'Sujet 7 - Forum 8',	'Message initial du sujet 7 - Forum 8'),
-(69,	9,	'Sujet 7 - Forum 9',	'Message initial du sujet 7 - Forum 9'),
-(70,	10,	'Sujet 7 - Forum 10',	'Message initial du sujet 7 - Forum 10'),
-(71,	1,	'Sujet 8 - Forum 1',	'Message initial du sujet 8 - Forum 1'),
-(72,	2,	'Sujet 8 - Forum 2',	'Message initial du sujet 8 - Forum 2'),
-(73,	3,	'Sujet 8 - Forum 3',	'Message initial du sujet 8 - Forum 3'),
-(74,	4,	'Sujet 8 - Forum 4',	'Message initial du sujet 8 - Forum 4'),
-(75,	5,	'Sujet 8 - Forum 5',	'Message initial du sujet 8 - Forum 5'),
-(76,	6,	'Sujet 8 - Forum 6',	'Message initial du sujet 8 - Forum 6'),
-(77,	7,	'Sujet 8 - Forum 7',	'Message initial du sujet 8 - Forum 7'),
-(78,	8,	'Sujet 8 - Forum 8',	'Message initial du sujet 8 - Forum 8'),
-(79,	9,	'Sujet 8 - Forum 9',	'Message initial du sujet 8 - Forum 9'),
-(80,	10,	'Sujet 8 - Forum 10',	'Message initial du sujet 8 - Forum 10'),
-(81,	1,	'Sujet 9 - Forum 1',	'Message initial du sujet 9 - Forum 1'),
-(82,	2,	'Sujet 9 - Forum 2',	'Message initial du sujet 9 - Forum 2'),
-(83,	3,	'Sujet 9 - Forum 3',	'Message initial du sujet 9 - Forum 3'),
-(84,	4,	'Sujet 9 - Forum 4',	'Message initial du sujet 9 - Forum 4'),
-(85,	5,	'Sujet 9 - Forum 5',	'Message initial du sujet 9 - Forum 5'),
-(86,	6,	'Sujet 9 - Forum 6',	'Message initial du sujet 9 - Forum 6'),
-(87,	7,	'Sujet 9 - Forum 7',	'Message initial du sujet 9 - Forum 7'),
-(88,	8,	'Sujet 9 - Forum 8',	'Message initial du sujet 9 - Forum 8'),
-(89,	9,	'Sujet 9 - Forum 9',	'Message initial du sujet 9 - Forum 9'),
-(90,	10,	'Sujet 9 - Forum 10',	'Message initial du sujet 9 - Forum 10'),
-(91,	1,	'Sujet 10 - Forum 1',	'Message initial du sujet 10 - Forum 1'),
-(92,	2,	'Sujet 10 - Forum 2',	'Message initial du sujet 10 - Forum 2'),
-(93,	3,	'Sujet 10 - Forum 3',	'Message initial du sujet 10 - Forum 3'),
-(94,	4,	'Sujet 10 - Forum 4',	'Message initial du sujet 10 - Forum 4'),
-(95,	5,	'Sujet 10 - Forum 5',	'Message initial du sujet 10 - Forum 5'),
-(96,	6,	'Sujet 10 - Forum 6',	'Message initial du sujet 10 - Forum 6'),
-(97,	7,	'Sujet 10 - Forum 7',	'Message initial du sujet 10 - Forum 7'),
-(98,	8,	'Sujet 10 - Forum 8',	'Message initial du sujet 10 - Forum 8'),
-(99,	9,	'Sujet 10 - Forum 9',	'Message initial du sujet 10 - Forum 9'),
-(100,	10,	'Sujet 10 - Forum 10',	'Message initial du sujet 10 - Forum 10');
+DROP TABLE IF EXISTS `Sujets`;
+CREATE TABLE `Sujets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `forum_id` int(11) DEFAULT NULL,
+  `nom` varchar(255) DEFAULT NULL,
+  `message_initial` text DEFAULT NULL,
+  `date` timestamp NOT NULL,
+  `auteur` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `forum_id` (`forum_id`),
+  CONSTRAINT `Sujets_ibfk_1` FOREIGN KEY (`forum_id`) REFERENCES `Forums` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT INTO `Sujets` (`id`, `forum_id`, `nom`, `message_initial`, `date`, `auteur`) VALUES
+(1,	1,	'Sujet 1 - Forum 1',	'Message initial du sujet 1 - Forum 1',	'2024-04-21 00:00:00',	1),
+(2,	2,	'Sujet 1 - Forum 2',	'Message initial du sujet 1 - Forum 2',	'2023-10-10 00:00:00', 1),
+(3,	3,	'Sujet 1 - Forum 3',	'Message initial du sujet 1 - Forum 3',	'2023-10-10 00:00:00', 1),
+(4,	4,	'Sujet 1 - Forum 4',	'Message initial du sujet 1 - Forum 4',	'2023-10-10 00:00:00', 1),
+(5,	5,	'Sujet 1 - Forum 5',	'Message initial du sujet 1 - Forum 5',	'2023-10-10 00:00:00', 1),
+(6,	6,	'Sujet 1 - Forum 6',	'Message initial du sujet 1 - Forum 6',	'2023-10-10 00:00:00', 1),
+(7,	7,	'Sujet 1 - Forum 7',	'Message initial du sujet 1 - Forum 7',	'2024-06-22 00:00:00',	2),
+(8,	8,	'Sujet 1 - Forum 8',	'Message initial du sujet 1 - Forum 8',	'2023-10-10 00:00:00', 1),
+(9,	9,	'Sujet 1 - Forum 9',	'Message initial du sujet 1 - Forum 9',	'2023-10-10 00:00:00', 1),
+(10,	10,	'Sujet 1 - Forum 10',	'Message initial du sujet 1 - Forum 10',	'2023-10-10 00:00:00', 1),
+(11,	1,	'Sujet 2 - Forum 1',	'Message initial du sujet 2 - Forum 1',	'2023-10-10 00:00:00', 1),
+(12,	2,	'Sujet 2 - Forum 2',	'Message initial du sujet 2 - Forum 2',	'2023-10-10 00:00:00', 1),
+(13,	3,	'Sujet 2 - Forum 3',	'Message initial du sujet 2 - Forum 3',	'2023-10-10 00:00:00', 1),
+(14,	4,	'Sujet 2 - Forum 4',	'Message initial du sujet 2 - Forum 4',	'2023-10-10 00:00:00', 1),
+(15,	5,	'Sujet 2 - Forum 5',	'Message initial du sujet 2 - Forum 5',	'2023-10-10 00:00:00', 1),
+(16,	6,	'Sujet 2 - Forum 6',	'Message initial du sujet 2 - Forum 6',	'2023-10-10 00:00:00', 1),
+(17,	7,	'Sujet 2 - Forum 7',	'Message initial du sujet 2 - Forum 7',	'2023-10-10 00:00:00', 1),
+(18,	8,	'Sujet 2 - Forum 8',	'Message initial du sujet 2 - Forum 8',	'2023-10-10 00:00:00', 1),
+(19,	9,	'Sujet 2 - Forum 9',	'Message initial du sujet 2 - Forum 9',	'2023-10-10 00:00:00', 1),
+(20,	10,	'Sujet 2 - Forum 10',	'Message initial du sujet 2 - Forum 10',	'2023-10-10 00:00:00', 1),
+(21,	1,	'Sujet 3 - Forum 1',	'Message initial du sujet 3 - Forum 1',	'2023-10-10 00:00:00', 1),
+(22,	2,	'Sujet 3 - Forum 2',	'Message initial du sujet 3 - Forum 2',	'2023-10-10 00:00:00', 1),
+(23,	3,	'Sujet 3 - Forum 3',	'Message initial du sujet 3 - Forum 3',	'2023-10-10 00:00:00', 1),
+(24,	4,	'Sujet 3 - Forum 4',	'Message initial du sujet 3 - Forum 4',	'2023-10-10 00:00:00', 1),
+(25,	5,	'Sujet 3 - Forum 5',	'Message initial du sujet 3 - Forum 5',	'2023-10-10 00:00:00', 1),
+(26,	6,	'Sujet 3 - Forum 6',	'Message initial du sujet 3 - Forum 6',	'2023-10-10 00:00:00', 1),
+(27,	7,	'Sujet 3 - Forum 7',	'Message initial du sujet 3 - Forum 7',	'2023-10-10 00:00:00', 1),
+(28,	8,	'Sujet 3 - Forum 8',	'Message initial du sujet 3 - Forum 8',	'2023-10-10 00:00:00', 1),
+(29,	9,	'Sujet 3 - Forum 9',	'Message initial du sujet 3 - Forum 9',	'2023-10-10 00:00:00', 1),
+(30,	10,	'Sujet 3 - Forum 10',	'Message initial du sujet 3 - Forum 10',	'2023-10-10 00:00:00', 1),
+(31,	1,	'Sujet 4 - Forum 1',	'Message initial du sujet 4 - Forum 1',	'2023-10-10 00:00:00', 1),
+(32,	2,	'Sujet 4 - Forum 2',	'Message initial du sujet 4 - Forum 2',	'2023-10-10 00:00:00', 1),
+(33,	3,	'Sujet 4 - Forum 3',	'Message initial du sujet 4 - Forum 3',	'2023-10-10 00:00:00', 1),
+(34,	4,	'Sujet 4 - Forum 4',	'Message initial du sujet 4 - Forum 4',	'2023-10-10 00:00:00', 1),
+(35,	5,	'Sujet 4 - Forum 5',	'Message initial du sujet 4 - Forum 5',	'2023-10-10 00:00:00', 1),
+(36,	6,	'Sujet 4 - Forum 6',	'Message initial du sujet 4 - Forum 6',	'2023-10-10 00:00:00', 1),
+(37,	7,	'Sujet 4 - Forum 7',	'Message initial du sujet 4 - Forum 7',	'2023-10-10 00:00:00', 1),
+(38,	8,	'Sujet 4 - Forum 8',	'Message initial du sujet 4 - Forum 8',	'2023-10-10 00:00:00', 1),
+(39,	9,	'Sujet 4 - Forum 9',	'Message initial du sujet 4 - Forum 9',	'2023-10-10 00:00:00', 1),
+(40,	10,	'Sujet 4 - Forum 10',	'Message initial du sujet 4 - Forum 10',	'2023-10-10 00:00:00', 1),
+(41,	1,	'Sujet 5 - Forum 1',	'Message initial du sujet 5 - Forum 1',	'2023-10-10 00:00:00', 1),
+(42,	2,	'Sujet 5 - Forum 2',	'Message initial du sujet 5 - Forum 2',	'2023-10-10 00:00:00', 1),
+(43,	3,	'Sujet 5 - Forum 3',	'Message initial du sujet 5 - Forum 3',	'2023-10-10 00:00:00', 1),
+(44,	4,	'Sujet 5 - Forum 4',	'Message initial du sujet 5 - Forum 4',	'2023-10-10 00:00:00', 1),
+(45,	5,	'Sujet 5 - Forum 5',	'Message initial du sujet 5 - Forum 5',	'2023-10-10 00:00:00', 1),
+(46,	6,	'Sujet 5 - Forum 6',	'Message initial du sujet 5 - Forum 6',	'2023-10-10 00:00:00', 1),
+(47,	7,	'Sujet 5 - Forum 7',	'Message initial du sujet 5 - Forum 7',	'2023-10-10 00:00:00', 1),
+(48,	8,	'Sujet 5 - Forum 8',	'Message initial du sujet 5 - Forum 8',	'2023-10-10 00:00:00', 1),
+(49,	9,	'Sujet 5 - Forum 9',	'Message initial du sujet 5 - Forum 9',	'2023-10-10 00:00:00', 1),
+(50,	10,	'Sujet 5 - Forum 10',	'Message initial du sujet 5 - Forum 10',	'2023-10-10 00:00:00', 1),
+(51,	1,	'Sujet 6 - Forum 1',	'Message initial du sujet 6 - Forum 1',	'2023-10-10 00:00:00', 1),
+(52,	2,	'Sujet 6 - Forum 2',	'Message initial du sujet 6 - Forum 2',	'2023-10-10 00:00:00', 1),
+(53,	3,	'Sujet 6 - Forum 3',	'Message initial du sujet 6 - Forum 3',	'2023-10-10 00:00:00', 1),
+(54,	4,	'Sujet 6 - Forum 4',	'Message initial du sujet 6 - Forum 4',	'2023-10-10 00:00:00', 1),
+(55,	5,	'Sujet 6 - Forum 5',	'Message initial du sujet 6 - Forum 5',	'2023-10-10 00:00:00', 1),
+(56,	6,	'Sujet 6 - Forum 6',	'Message initial du sujet 6 - Forum 6',	'2023-10-10 00:00:00', 1),
+(57,	7,	'Sujet 6 - Forum 7',	'Message initial du sujet 6 - Forum 7',	'2023-10-10 00:00:00', 1),
+(58,	8,	'Sujet 6 - Forum 8',	'Message initial du sujet 6 - Forum 8',	'2023-10-10 00:00:00', 1),
+(59,	9,	'Sujet 6 - Forum 9',	'Message initial du sujet 6 - Forum 9',	'2023-10-10 00:00:00', 1),
+(60,	10,	'Sujet 6 - Forum 10',	'Message initial du sujet 6 - Forum 10',	'2023-10-10 00:00:00', 1),
+(61,	1,	'Sujet 7 - Forum 1',	'Message initial du sujet 7 - Forum 1',	'2023-10-10 00:00:00', 1),
+(62,	2,	'Sujet 7 - Forum 2',	'Message initial du sujet 7 - Forum 2',	'2023-10-10 00:00:00', 1),
+(63,	3,	'Sujet 7 - Forum 3',	'Message initial du sujet 7 - Forum 3',	'2023-10-10 00:00:00', 1),
+(64,	4,	'Sujet 7 - Forum 4',	'Message initial du sujet 7 - Forum 4',	'2023-10-10 00:00:00', 1),
+(65,	5,	'Sujet 7 - Forum 5',	'Message initial du sujet 7 - Forum 5',	'2023-10-10 00:00:00', 1),
+(66,	6,	'Sujet 7 - Forum 6',	'Message initial du sujet 7 - Forum 6',	'2023-10-10 00:00:00', 1),
+(67,	7,	'Sujet 7 - Forum 7',	'Message initial du sujet 7 - Forum 7',	'2023-10-10 00:00:00', 1),
+(68,	8,	'Sujet 7 - Forum 8',	'Message initial du sujet 7 - Forum 8',	'2023-10-10 00:00:00', 1),
+(69,	9,	'Sujet 7 - Forum 9',	'Message initial du sujet 7 - Forum 9',	'2023-10-10 00:00:00', 1),
+(70,	10,	'Sujet 7 - Forum 10',	'Message initial du sujet 7 - Forum 10',	'2023-10-10 00:00:00', 1),
+(71,	1,	'Sujet 8 - Forum 1',	'Message initial du sujet 8 - Forum 1',	'2023-10-10 00:00:00', 1),
+(72,	2,	'Sujet 8 - Forum 2',	'Message initial du sujet 8 - Forum 2',	'2023-10-10 00:00:00', 1),
+(73,	3,	'Sujet 8 - Forum 3',	'Message initial du sujet 8 - Forum 3',	'2023-10-10 00:00:00', 1),
+(74,	4,	'Sujet 8 - Forum 4',	'Message initial du sujet 8 - Forum 4',	'2023-10-10 00:00:00', 1),
+(75,	5,	'Sujet 8 - Forum 5',	'Message initial du sujet 8 - Forum 5',	'2023-10-10 00:00:00', 1),
+(76,	6,	'Sujet 8 - Forum 6',	'Message initial du sujet 8 - Forum 6',	'2023-10-10 00:00:00', 1),
+(77,	7,	'Sujet 8 - Forum 7',	'Message initial du sujet 8 - Forum 7',	'2023-10-10 00:00:00', 1),
+(78,	8,	'Sujet 8 - Forum 8',	'Message initial du sujet 8 - Forum 8',	'2023-10-10 00:00:00', 1),
+(79,	9,	'Sujet 8 - Forum 9',	'Message initial du sujet 8 - Forum 9',	'2023-10-10 00:00:00', 1),
+(80,	10,	'Sujet 8 - Forum 10',	'Message initial du sujet 8 - Forum 10',	'2023-10-10 00:00:00', 1),
+(81,	1,	'Sujet 9 - Forum 1',	'Message initial du sujet 9 - Forum 1',	'2023-10-10 00:00:00', 1),
+(82,	2,	'Sujet 9 - Forum 2',	'Message initial du sujet 9 - Forum 2',	'2023-10-10 00:00:00', 1),
+(83,	3,	'Sujet 9 - Forum 3',	'Message initial du sujet 9 - Forum 3',	'2023-10-10 00:00:00', 1),
+(84,	4,	'Sujet 9 - Forum 4',	'Message initial du sujet 9 - Forum 4',	'2023-10-10 00:00:00', 1),
+(85,	5,	'Sujet 9 - Forum 5',	'Message initial du sujet 9 - Forum 5',	'2023-10-10 00:00:00', 1),
+(86,	6,	'Sujet 9 - Forum 6',	'Message initial du sujet 9 - Forum 6',	'2023-10-10 00:00:00', 1),
+(87,	7,	'Sujet 9 - Forum 7',	'Message initial du sujet 9 - Forum 7',	'2023-10-10 00:00:00', 1),
+(88,	8,	'Sujet 9 - Forum 8',	'Message initial du sujet 9 - Forum 8',	'2023-10-10 00:00:00', 1),
+(89,	9,	'Sujet 9 - Forum 9',	'Message initial du sujet 9 - Forum 9',	'2023-10-10 00:00:00', 1),
+(90,	10,	'Sujet 9 - Forum 10',	'Message initial du sujet 9 - Forum 10',	'2023-10-10 00:00:00', 1),
+(91,	1,	'Sujet 10 - Forum 1',	'Message initial du sujet 10 - Forum 1',	'2023-10-10 00:00:00', 1),
+(92,	2,	'Sujet 10 - Forum 2',	'Message initial du sujet 10 - Forum 2',	'2023-10-10 00:00:00', 1),
+(93,	3,	'Sujet 10 - Forum 3',	'Message initial du sujet 10 - Forum 3',	'2023-10-10 00:00:00', 1),
+(94,	4,	'Sujet 10 - Forum 4',	'Message initial du sujet 10 - Forum 4',	'2023-10-10 00:00:00', 1),
+(95,	5,	'Sujet 10 - Forum 5',	'Message initial du sujet 10 - Forum 5',	'2023-10-10 00:00:00', 1),
+(96,	6,	'Sujet 10 - Forum 6',	'Message initial du sujet 10 - Forum 6',	'2023-10-10 00:00:00', 1),
+(97,	7,	'Sujet 10 - Forum 7',	'Message initial du sujet 10 - Forum 7',	'2023-10-10 00:00:00', 1),
+(98,	8,	'Sujet 10 - Forum 8',	'Message initial du sujet 10 - Forum 8',	'2023-10-10 00:00:00', 1),
+(99,	9,	'Sujet 10 - Forum 9',	'Message initial du sujet 10 - Forum 9',	'2023-10-10 00:00:00', 1),
+(100,	10,	'Sujet 10 - Forum 10',	'Message initial du sujet 10 - Forum 10',	'2023-10-10 00:00:00', 1);
+
+DROP TABLE IF EXISTS `Users`;
+CREATE TABLE `Users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(250) NOT NULL,
+  `password` varchar(250) NOT NULL,
+  `admin` bit(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `Users` (`id`, `nom`, `password`, `admin`) VALUES
 (1,	'brozer',	'$2y$10$5k4rTczAKP1P.GhalJzIJuY.Za8/NX5WABEPDmX6ZfNe7MoxYGaqy',	CONV('0', 2, 10) + 0),
 (2,	'admin',	'$2y$10$SolbpHXV9i/MsB3enCXGbeDP7MBzY5kKxoijiqYM8BD9KsRPkKdGG',	CONV('1', 2, 10) + 0);
 
--- 2024-03-27 14:13:34
-
-
+-- 2024-04-21 15:21:12

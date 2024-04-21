@@ -54,10 +54,22 @@ onMounted(() => {
             max-width="360"
             rounded="xl"
             variant="text">
-      <router-link :to="'message/'+d.id"
+      <router-link :to="'/message/'+d.id"
                    class="text-decoration-none text-deep-orange-darken-2">
         <v-card-text class="text-h5 font-weight-black">
           {{ d.nom }}
+        </v-card-text>
+        <v-card-text class="pb-0">
+          Auteur du sujet :
+          {{ d.auteur }}
+        </v-card-text>
+        <v-card-text>
+          Date de création du sujet :
+          {{ d.date }}
+        </v-card-text>
+        <v-card-text class="pt-0">
+          Auteur du dernier message :
+          {{ d.message_der_auteur }}
         </v-card-text>
       </router-link>
     </v-card>

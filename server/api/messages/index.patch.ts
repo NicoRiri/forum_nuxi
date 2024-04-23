@@ -88,7 +88,7 @@ export default defineEventHandler(async (event) => {
         return ({status: 1, error: "Id vide"})
     }
 
-    const [auteurMess] = await await conn.execute("SELECT * FROM Messages WHERE id = ?", [body.message_id])
+    const [auteurMess] = await conn.execute("SELECT * FROM Messages WHERE id = ?", [body.message_id])
 
     let ownBoo = false
 

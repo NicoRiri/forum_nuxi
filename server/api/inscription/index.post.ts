@@ -35,6 +35,8 @@ export default defineEventHandler(async (event) => {
 
      const passwdhash = await hash(password, await genSalt(10))
 
+     const conn = await connection
+
      const [verifRows] = await conn.execute("SELECT COUNT(*) as nb FROM Users WHERE nom = ?", [login])
 
      // @ts-ignore

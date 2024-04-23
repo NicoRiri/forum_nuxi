@@ -82,14 +82,10 @@ export default defineEventHandler(async (event) => {
     const nomWoSpace = body.nom.replace(/\s/g, '')
     const messWoSpace = body.message_initial.replace(/\s/g, '')
 
-    console.log(nomWoSpace.length)
-
     if (nomWoSpace.length === 0){
         setResponseStatus(event, 401)
         return ({status: 1, error: "Nom vide"})
     }
-
-    console.log(messWoSpace.length)
 
     if (messWoSpace.length === 0){
         setResponseStatus(event, 401)

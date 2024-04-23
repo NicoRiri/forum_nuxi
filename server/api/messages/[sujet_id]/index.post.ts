@@ -1,6 +1,5 @@
 import {connection} from "~/server/utils";
 import {compare} from "bcrypt";
-import useRoute from "nuxt/app";
 
 export default defineEventHandler(async (event) => {
     const auth = event.headers.get("Authorization")
@@ -47,7 +46,7 @@ export default defineEventHandler(async (event) => {
 
     const resCompareUser = await compare(password, user[0].password)
 
-    if (resCompareUser === false) {
+    if (!resCompareUser) {
         setResponseStatus(event, 401)
         return ({status: 1, error: "Login ou mot de passe incorrect"})
     }
@@ -67,6 +66,11 @@ export default defineEventHandler(async (event) => {
     if (body === undefined){
         setResponseStatus(event, 401)
         return ({status: 1, error: "Body vide"})
+    }
+
+    if (body.contenu === undefined){
+        setResponseStatus(event, 401)
+        return ({status: 1, error: "Message null"})
     }
 
     const messWoSpace = body.contenu.replace(/\s/g, '')

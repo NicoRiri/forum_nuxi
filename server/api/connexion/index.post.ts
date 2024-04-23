@@ -3,13 +3,35 @@
      import {hash, genSalt, compare} from "bcrypt";
 
      export default defineEventHandler(async (event) => {
-          const conn = await connection
-          const headers = event.headers
-          const auth = headers.get("Authorization")
-          const b64 = auth!.split(" ")[1]
-          const text = atob(b64)
+          const auth = event.headers.get("Authorization")
+          if (auth === undefined || auth === null) {
+               setResponseStatus(event, 401)
+               return ({status: 1, error: "Authentification requise"})
+          }
+
+          if (!auth.startsWith("Basic ")) {
+               setResponseStatus(event, 401)
+               return ({status: 1, error: "Authentification mal formée"})
+          }
+
+          let text = ""
+          try {
+               const b64 = auth.split(" ")[1]
+               text = atob(b64)
+          } catch (e) {
+               setResponseStatus(event, 401)
+               return ({status: 1, error: "Encodage mal fait"})
+          }
           const login = text.split(":")[0]
+          if (login === "") {
+               setResponseStatus(event, 401)
+               return ({status: 1, error: "Login requis"})
+          }
           const password = text.split(":")[1]
+          if (password === "") {
+               setResponseStatus(event, 401)
+               return ({status: 1, error: "Mot de passe requis"})
+          }
 
           const [passwordBdd] = await conn.execute("SELECT password FROM Users WHERE nom = ?", [login])
           // @ts-ignore

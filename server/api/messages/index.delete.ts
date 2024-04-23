@@ -56,7 +56,6 @@ export default defineEventHandler(async (event) => {
         return ({status: 1, error: "Login ou mot de passe incorrect"})
     }
 
-    //Vérifier si sujet existe
     const body = await readBody(event)
 
     if (body === undefined){
@@ -64,44 +63,25 @@ export default defineEventHandler(async (event) => {
         return ({status: 1, error: "Body vide"})
     }
 
-    if (body.contenu === undefined){
-        setResponseStatus(event, 401)
-        return ({status: 1, error: "Message null"})
-    }
-
     if (body.message_id === undefined){
         setResponseStatus(event, 401)
-        return ({status: 1, error: "id null"})
+        return ({status: 1, error: "message null"})
     }
 
-    const messWoSpace = body.contenu.replace(/\s/g, '')
-    const idWoSpace = body.message_id.replace(/\s/g, '')
+    const mIdWoSpace = body.message_id.replace(/\s/g, '')
 
-    console.log(messWoSpace.length)
 
-    if (messWoSpace.length === 0){
+    if (mIdWoSpace.length === 0){
         setResponseStatus(event, 401)
-        return ({status: 1, error: "Message vide"})
+        return ({status: 1, error: "message Vide"})
     }
 
-    if (idWoSpace.length === 0){
+    if (admin_boolean){
+        await conn.execute("DELETE FROM Messages WHERE id = ?", [body.message_id])
+        setResponseStatus(event, 200)
+        return ({status: 0, error: "Le message a bien été supprimé"})
+    } else {
         setResponseStatus(event, 401)
-        return ({status: 1, error: "Id vide"})
+        return ({status: 1, error: "Pas la permission de supprimer un message"})
     }
-
-    const [auteurMess] = await await conn.execute("SELECT * FROM Messages WHERE id = ?", [body.message_id])
-
-    let ownBoo = false
-
-    if (auteurMess[0].user_id === user[0].id) ownBoo = true
-
-    if (!ownBoo && !admin_boolean){
-        setResponseStatus(event, 401)
-        return ({status: 1, error: "Pas la permission de modifier le message d'un autre"})
-    }
-
-    await conn.execute("UPDATE Messages SET contenu = ? WHERE id = ?", [body.contenu, body.message_id])
-
-    setResponseStatus(event, 200)
-    return ({status: 0, message: "Message modifié avec succès"})
 })

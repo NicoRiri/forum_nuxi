@@ -35,7 +35,6 @@ export default defineEventHandler(async (event) => {
     const conn = await connection
 
     //Vérifier qu'il existe / mot de passe est bon
-    console.log(login)
     const [admin] = await conn.execute("SELECT * FROM Users WHERE nom = ?", [login])
 
     //Le compte n'existe pas

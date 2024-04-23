@@ -77,7 +77,6 @@ export default defineEventHandler(async (event) => {
     const messWoSpace = body.contenu.replace(/\s/g, '')
     const idWoSpace = body.message_id.replace(/\s/g, '')
 
-    console.log(messWoSpace.length)
 
     if (messWoSpace.length === 0){
         setResponseStatus(event, 401)

@@ -1,5 +1,5 @@
 import {connection} from "~/server/utils";
-import {compare} from "bcrypt";
+import {compare, genSalt, hash} from "bcrypt";
 import {id} from "vuetify/locale";
 
 export default defineEventHandler(async (event) => {
@@ -38,9 +38,6 @@ export default defineEventHandler(async (event) => {
     //Vérifier qu'il existe / mot de passe est bon
     const [user] = await conn.execute("SELECT * FROM Users WHERE nom = ?", [login])
 
-    const admin_v = user[0].admin
-    const admin_buffer = Buffer.from(admin_v)
-    const admin_boolean = Boolean(admin_buffer.readInt8())
 
     //Le compte n'existe pas
     if (user.length === 0) {
@@ -64,43 +61,22 @@ export default defineEventHandler(async (event) => {
         return ({status: 1, error: "Body vide"})
     }
 
-    if (body.contenu === undefined){
+    if (body.password === undefined){
         setResponseStatus(event, 401)
         return ({status: 1, error: "Message null"})
     }
 
-    if (body.message_id === undefined){
+    const passWoSpace = body.password.replace(/\s/g, '')
+
+    if (passWoSpace.length === 0){
         setResponseStatus(event, 401)
-        return ({status: 1, error: "id null"})
+        return ({status: 1, error: "mot de passe vide"})
     }
 
-    const messWoSpace = body.contenu.replace(/\s/g, '')
-    const idWoSpace = body.message_id.replace(/\s/g, '')
+    const passwdhash = await hash(body.password, await genSalt(10))
 
-
-    if (messWoSpace.length === 0){
-        setResponseStatus(event, 401)
-        return ({status: 1, error: "Message vide"})
-    }
-
-    if (idWoSpace.length === 0){
-        setResponseStatus(event, 401)
-        return ({status: 1, error: "Id vide"})
-    }
-
-    const [auteurMess] = await conn.execute("SELECT * FROM Messages WHERE id = ?", [body.message_id])
-
-    let ownBoo = false
-
-    if (auteurMess[0].user_id === user[0].id) ownBoo = true
-
-    if (!ownBoo && !admin_boolean){
-        setResponseStatus(event, 401)
-        return ({status: 1, error: "Pas la permission de modifier le message d'un autre"})
-    }
-
-    await conn.execute("UPDATE Messages SET contenu = ? WHERE id = ?", [body.contenu, body.message_id])
+    await conn.execute("UPDATE Users SET password = ? WHERE id = ?", [passwdhash, user[0].id])
 
     setResponseStatus(event, 200)
-    return ({status: 0, message: "Message modifié avec succès"})
+    return ({status: 0, message: "Mot de passe modifié avec succès"})
 })

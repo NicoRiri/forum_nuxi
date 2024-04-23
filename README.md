@@ -15,7 +15,7 @@ mv .env.example .env
 ````
 
 ````js
-//Mot de pas root de la BDD
+//Mot de passe root de la BDD
 MARIADB_ROOT_PASSWORD:mot_de_passe_a_changer
 
 //Nom d'utilisateur du nouvel utilisateur de la BDD

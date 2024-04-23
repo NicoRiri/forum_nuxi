@@ -33,6 +33,8 @@
                return ({status: 1, error: "Mot de passe requis"})
           }
 
+          const conn = await connection
+
           const [passwordBdd] = await conn.execute("SELECT password FROM Users WHERE nom = ?", [login])
           // @ts-ignore
           const res = await compare(password, passwordBdd[0].password)

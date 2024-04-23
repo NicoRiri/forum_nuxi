@@ -57,15 +57,20 @@ export default defineEventHandler(async (event) => {
     const admin_buffer = Buffer.from(admin_v)
     const admin_boolean = Boolean(admin_buffer.readInt8())
 
+    const body = await readBody(event)
+
     if (admin_boolean) {
         if (body === undefined) {
             setResponseStatus(event, 401)
             return ({status: 1, error: "Body vide"})
         }
 
-        const nomWoSpace = body.nom.replace(/\s/g, '')
+        if (body.nom === undefined){
+            setResponseStatus(event, 401)
+            return ({status: 1, error: "Nom null"})
+        }
 
-        console.log(nomWoSpace.length)
+        const nomWoSpace = body.nom.replace(/\s/g, '')
 
         if (nomWoSpace.length === 0) {
             setResponseStatus(event, 401)

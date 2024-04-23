@@ -11,8 +11,8 @@ function fetchForums() {
 }
 
 function fetchNbPage() {
-  $fetch("/api/forums/nbpage").then((response) => {
-    nbpage.value = response.res
+  $fetch("/api/forums").then((response) => {
+    nbpage.value = response.nbPage
   })
 }
 

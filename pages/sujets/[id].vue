@@ -18,6 +18,12 @@ function fetchSujet() {
   })
 }
 
+function fetchNbPage(){
+  $fetch("/api/sujets/"+idForum.value).then((response) =>{
+    nbpage.value = response.nbPage
+  })
+}
+
 function toNewSujet() {
   if (connected.value) {
     navigateTo("/newSujet/" + idForum)
@@ -28,6 +34,7 @@ function toNewSujet() {
 
 onMounted(() => {
   fetchSujet()
+  fetchNbPage()
 })
 
 </script>
@@ -56,16 +63,13 @@ onMounted(() => {
             variant="text">
       <router-link :to="'/message/'+d.id"
                    class="text-decoration-none text-deep-orange-darken-2">
-        <v-card-text class="text-h5 font-weight-black">
-          {{ d.nom }}
-        </v-card-text>
         <v-card-text class="pb-0">
           Auteur du sujet :
           {{ d.auteur }}
         </v-card-text>
         <v-card-text>
           Date de création du sujet :
-          {{ d.date }}
+          {{ d.date.substring(0,10) }}
         </v-card-text>
         <v-card-text class="pt-0">
           Auteur du dernier message :

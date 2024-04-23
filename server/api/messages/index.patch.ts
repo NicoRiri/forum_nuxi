@@ -69,13 +69,13 @@ export default defineEventHandler(async (event) => {
         return ({status: 1, error: "Message null"})
     }
 
-    if (body.id_message === undefined){
+    if (body.message_id === undefined){
         setResponseStatus(event, 401)
         return ({status: 1, error: "id null"})
     }
 
     const messWoSpace = body.contenu.replace(/\s/g, '')
-    const idWoSpace = body.id_message.replace(/\s/g, '')
+    const idWoSpace = body.message_id.replace(/\s/g, '')
 
     console.log(messWoSpace.length)
 
@@ -89,7 +89,7 @@ export default defineEventHandler(async (event) => {
         return ({status: 1, error: "Id vide"})
     }
 
-    const [auteurMess] = await await conn.execute("SELECT * FROM Messages WHERE id = ?", [body.id_message])
+    const [auteurMess] = await await conn.execute("SELECT * FROM Messages WHERE id = ?", [body.message_id])
 
     let ownBoo = false
 
@@ -100,7 +100,7 @@ export default defineEventHandler(async (event) => {
         return ({status: 1, error: "Pas la permission de modifier le message d'un autre"})
     }
 
-    await conn.execute("UPDATE Messages SET contenu = ? WHERE id = ?", [body.contenu, body.id_message])
+    await conn.execute("UPDATE Messages SET contenu = ? WHERE id = ?", [body.contenu, body.message_id])
 
     setResponseStatus(event, 200)
     return ({status: 0, message: "Message modifié avec succès"})

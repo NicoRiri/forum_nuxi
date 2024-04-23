@@ -1,5 +1,6 @@
 import {connection} from "~/server/utils";
 import {compare} from "bcrypt";
+import useRoute from "nuxt/app";
 
 export default defineEventHandler(async (event) => {
     const auth = event.headers.get("Authorization")
@@ -35,49 +36,50 @@ export default defineEventHandler(async (event) => {
     const conn = await connection
 
     //Vérifier qu'il existe / mot de passe est bon
-    console.log(login)
-    const [admin] = await conn.execute("SELECT * FROM Users WHERE nom = ?", [login])
+    const [user] = await conn.execute("SELECT * FROM Users WHERE nom = ?", [login])
 
     //Le compte n'existe pas
-    if (admin.length === 0) {
+    if (user.length === 0) {
         setResponseStatus(event, 401)
         return ({status: 1, error: "Login ou mot de passe incorrect"})
     }
 
 
-    const resCompareAdmin = await compare(password, admin[0].password)
+    const resCompareUser = await compare(password, user[0].password)
 
-    if (resCompareAdmin === false) {
+    if (resCompareUser === false) {
         setResponseStatus(event, 401)
         return ({status: 1, error: "Login ou mot de passe incorrect"})
     }
 
-    //Vérifier qu'il est admin
-    const admin_v = admin[0].admin
-    const admin_buffer = Buffer.from(admin_v)
-    const admin_boolean = Boolean(admin_buffer.readInt8())
+    //Vérifier si sujet existe
+    const sujet_id = getRouterParam(event, 'sujet_id')
+    const [sujet] = await conn.execute("SELECT * FROM Sujets WHERE id = ?", [sujet_id])
 
-    if (admin_boolean) {
-        if (body === undefined) {
-            setResponseStatus(event, 401)
-            return ({status: 1, error: "Body vide"})
-        }
-
-        const nomWoSpace = body.nom.replace(/\s/g, '')
-
-        console.log(nomWoSpace.length)
-
-        if (nomWoSpace.length === 0) {
-            setResponseStatus(event, 401)
-            return ({status: 1, error: "Nom vide"})
-        }
-
-        await conn.execute("INSERT INTO Forums (name) VALUES (?)", [body.nom])
-
-        setResponseStatus(event, 200)
-        return ({status: 0, message: "Forum ajouté avec succès"})
-    } else {
+    if (sujet.length === 0){
         setResponseStatus(event, 401)
-        return ({status: 1, error: "Compte pas administrateur"})
+        return ({status: 1, error: "Sujet inexistant"})
     }
+
+
+    const body = await readBody(event)
+
+    if (body === undefined){
+        setResponseStatus(event, 401)
+        return ({status: 1, error: "Body vide"})
+    }
+
+    const messWoSpace = body.contenu.replace(/\s/g, '')
+
+    console.log(messWoSpace.length)
+
+    if (messWoSpace.length === 0){
+        setResponseStatus(event, 401)
+        return ({status: 1, error: "Message vide"})
+    }
+
+    await conn.execute("INSERT INTO Messages (sujet_id, user_id, contenu) VALUES (?, ?, ?)", [sujet_id, user[0].id, body.contenu])
+
+    setResponseStatus(event, 200)
+    return ({status: 0, message: "Message ajouté avec succès"})
 })

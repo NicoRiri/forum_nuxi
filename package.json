@@ -23,7 +23,6 @@
     "@sidebase/nuxt-session": "^0.2.8",
     "@types/bluebird": "^3.5.42",
     "vite-plugin-vuetify": "^2.0.3",
-    "vuetify": "^3.5.12",
-    "@types/bluebird": "^3.5.42"
+    "vuetify": "^3.5.12"
   }
 }

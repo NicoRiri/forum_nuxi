@@ -81,7 +81,9 @@ export default defineEventHandler(async (event) => {
         return ({status: 1, error: "Message vide"})
     }
 
-    await conn.execute("INSERT INTO Messages (sujet_id, user_id, contenu) VALUES (?, ?, ?)", [sujet_id, user[0].id, body.contenu])
+    const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+    await conn.execute("INSERT INTO Messages (sujet_id, user_id, contenu, timestamp) VALUES (?, ?, ?, ?)", [sujet_id, user[0].id, body.contenu, date])
 
     setResponseStatus(event, 200)
     return ({status: 0, message: "Message ajouté avec succès"})

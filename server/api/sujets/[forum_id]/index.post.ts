@@ -94,7 +94,8 @@ export default defineEventHandler(async (event) => {
 
     const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-    await conn.execute("INSERT INTO Sujets (nom, forum_id, auteur, message_initial, date) VALUES (?, ?, ?, ?, ?)", [body.nom, forum_id, user[0].id, body.message_initial, date])
+    const insert = await conn.execute("INSERT INTO Sujets (nom, forum_id, auteur, message_initial, date) VALUES (?, ?, ?, ?, ?)", [body.nom, forum_id, user[0].id, body.message_initial, date])
+    await conn.execute("INSERT INTO Messages (sujet_id, timestamp, user_id, contenu) VALUES (?, ?, ?, ?)", [insert.insertId, date, user[0].id, body.message_initial])
 
     setResponseStatus(event, 200)
     return ({status: 0, message: "Message ajouté avec succès"})

@@ -77,7 +77,6 @@ export default defineEventHandler(async (event) => {
     const messWoSpace = body.contenu.replace(/\s/g, '')
     const idWoSpace = body.message_id.replace(/\s/g, '')
 
-    console.log(messWoSpace.length)
 
     if (messWoSpace.length === 0){
         setResponseStatus(event, 401)
@@ -89,7 +88,7 @@ export default defineEventHandler(async (event) => {
         return ({status: 1, error: "Id vide"})
     }
 
-    const [auteurMess] = await await conn.execute("SELECT * FROM Messages WHERE id = ?", [body.message_id])
+    const [auteurMess] = await conn.execute("SELECT * FROM Messages WHERE id = ?", [body.message_id])
 
     let ownBoo = false
 

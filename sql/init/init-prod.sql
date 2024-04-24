@@ -14,7 +14,6 @@ CREATE TABLE `Forums` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
 DROP TABLE IF EXISTS `Messages`;
 CREATE TABLE `Messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -27,13 +26,14 @@ CREATE TABLE `Messages` (
   CONSTRAINT `Messages_ibfk_1` FOREIGN KEY (`sujet_id`) REFERENCES `Sujets` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
 DROP TABLE IF EXISTS `Sujets`;
 CREATE TABLE `Sujets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `forum_id` int(11) DEFAULT NULL,
   `nom` varchar(255) DEFAULT NULL,
   `message_initial` text DEFAULT NULL,
+  `date` timestamp NOT NULL,
+  `auteur` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `forum_id` (`forum_id`),
   CONSTRAINT `Sujets_ibfk_1` FOREIGN KEY (`forum_id`) REFERENCES `Forums` (`id`)
@@ -48,5 +48,7 @@ CREATE TABLE `Users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 2024-03-27 14:13:16
+INSERT INTO `Users` (`id`, `nom`, `password`, `admin`) VALUES
+(1,	'admin',	'$2b$10$zQ.xJeny0nwURgnFJYoii.nqumcztLnYvFdld.sYbmT.q/vXEETMS',	CONV('1', 2, 10) + 0);
 
+-- 2024-04-21 15:21:12

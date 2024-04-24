@@ -1,5 +1,6 @@
 import {connection} from "~/server/utils";
-import {compare} from "bcrypt";
+import {compare, genSalt, hash} from "bcrypt";
+import {id} from "vuetify/locale";
 
 export default defineEventHandler(async (event) => {
     const auth = event.headers.get("Authorization")
@@ -35,53 +36,47 @@ export default defineEventHandler(async (event) => {
     const conn = await connection
 
     //Vérifier qu'il existe / mot de passe est bon
-    const [admin] = await conn.execute("SELECT * FROM Users WHERE nom = ?", [login])
+    const [user] = await conn.execute("SELECT * FROM Users WHERE nom = ?", [login])
+
 
     //Le compte n'existe pas
-    if (admin.length === 0) {
+    if (user.length === 0) {
         setResponseStatus(event, 401)
         return ({status: 1, error: "Login ou mot de passe incorrect"})
     }
 
 
-    const resCompareAdmin = await compare(password, admin[0].password)
+    const resCompareUser = await compare(password, user[0].password)
 
-    if (resCompareAdmin === false) {
+    if (!resCompareUser) {
         setResponseStatus(event, 401)
         return ({status: 1, error: "Login ou mot de passe incorrect"})
     }
 
-    //Vérifier qu'il est admin
-    const admin_v = admin[0].admin
-    const admin_buffer = Buffer.from(admin_v)
-    const admin_boolean = Boolean(admin_buffer.readInt8())
-
+    //Vérifier si sujet existe
     const body = await readBody(event)
 
-    if (admin_boolean) {
-        if (body === undefined) {
-            setResponseStatus(event, 401)
-            return ({status: 1, error: "Body vide"})
-        }
-
-        if (body.nom === undefined){
-            setResponseStatus(event, 401)
-            return ({status: 1, error: "Nom null"})
-        }
-
-        const nomWoSpace = body.nom.replace(/\s/g, '')
-
-        if (nomWoSpace.length === 0) {
-            setResponseStatus(event, 401)
-            return ({status: 1, error: "Nom vide"})
-        }
-
-        await conn.execute("INSERT INTO Forums (name) VALUES (?)", [body.nom])
-
-        setResponseStatus(event, 200)
-        return ({status: 0, message: "Forum ajouté avec succès"})
-    } else {
+    if (body === undefined){
         setResponseStatus(event, 401)
-        return ({status: 1, error: "Compte pas administrateur"})
+        return ({status: 1, error: "Body vide"})
     }
+
+    if (body.password === undefined){
+        setResponseStatus(event, 401)
+        return ({status: 1, error: "Message null"})
+    }
+
+    const passWoSpace = body.password.replace(/\s/g, '')
+
+    if (passWoSpace.length === 0){
+        setResponseStatus(event, 401)
+        return ({status: 1, error: "mot de passe vide"})
+    }
+
+    const passwdhash = await hash(body.password, await genSalt(10))
+
+    await conn.execute("UPDATE Users SET password = ? WHERE id = ?", [passwdhash, user[0].id])
+
+    setResponseStatus(event, 200)
+    return ({status: 0, message: "Mot de passe modifié avec succès"})
 })

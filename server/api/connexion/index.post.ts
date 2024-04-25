@@ -35,7 +35,7 @@
 
           const conn = await connection
 
-          const [passwordBdd] = await conn.execute("SELECT password, admin FROM Users WHERE nom = ?", [login])
+          const [passwordBdd] = await conn.execute("SELECT id, password, admin FROM Users WHERE nom = ?", [login])
           // @ts-ignore
           const res = await compare(password, passwordBdd[0].password)
           if(res){
@@ -45,7 +45,8 @@
                setResponseStatus(event, 202)
                return {
                     "message" : "connecté",
-                    "admin" : admin_boolean
+                    "admin" : admin_boolean,
+                    "id" : passwordBdd[0].id
                }
           } else {
                setResponseStatus(event, 401)

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {connected} from "~/app.vue";
+import {connecter,admin,user_id,pseudo,mdp} from "~/app.vue";
 const login = ref('')
 const password = ref('')
 const error = ref('')
@@ -22,7 +22,11 @@ function inscription() {
         "login": login.value,
         "password": password.value
       })
-      connected()
+      user_id.value = response.id
+      mdp.value = password.value
+      pseudo.value = login.value
+      admin.value = response.admin
+      connecter.value = true
       navigateTo('/forums')
     } else {
       error.value = response.message

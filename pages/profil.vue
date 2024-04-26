@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {connecter,admin,user_id,pseudo,mdp} from "~/app.vue";
 const {session, update, refresh, reset} = await useSession()
 const changemdp = ref(false)
 const newmdp1 = ref("")
@@ -14,11 +15,14 @@ function postMDP(){
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
+        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
       },
       body:{
         "password": newmdp1.value
       }
+    }).then(() => {
+      mdp.value = newmdp1.value
+      navigateTo("/profil")
     })
   }
 }

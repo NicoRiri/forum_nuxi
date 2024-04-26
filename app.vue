@@ -1,10 +1,11 @@
 <script lang="ts">
 
 export const connecter = ref(false)
+export const admin = ref(false)
+export const user_id = ref(-1)
+export const pseudo = ref("")
+export const mdp = ref("")
 
-export function connected() {
-  connecter.value = true
-}
 </script>
 
 <script setup lang="ts">
@@ -12,14 +13,24 @@ export function connected() {
 
 const {session, update, refresh, reset} = await useSession()
 
-if (session.value.login) {
-  connected()
-}
 
 function deconnexion() {
   reset()
   connecter.value = false
+  admin.value = false
   navigateTo('/forums')
+}
+
+async function refreshSession(){
+  await refresh()
+  if(session.value.login){
+    connecter.value = true
+  }
+  console.log(session.value)
+    setTimeout(()=>{
+      console.log(session.value)
+      refreshSession()
+    },50000)
 }
 
 onMounted(() => {
@@ -36,7 +47,7 @@ onMounted(() => {
       <v-btn v-if="!connecter" to="/connexion" class="bouton">Connexion</v-btn>
       <div v-else class="bouton">
         <router-link to="/admin">
-          <v-btn v-if="session.admin" class="mr-3">Creer un compte admin</v-btn>
+          <v-btn v-if="admin" class="mr-3">Creer un compte admin</v-btn>
         </router-link>
         <router-link to="/profil">
           <v-btn>Profil</v-btn>

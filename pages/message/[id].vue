@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {connecter,admin,user_id,pseudo,mdp} from "~/app.vue";
 const route = useRoute()
 const idSujet = ref(route.params.id)
 const data = ref()
@@ -6,15 +7,12 @@ const page = ref(1)
 const nbpage = ref()
 const error = ref("")
 const {session, refresh, update, reset} = await useSession()
-const connected = ref(false)
 const newmess = ref(false)
 const message = ref("")
 const modif = ref({modif: false, id: -1})
 const modifmess = ref("")
 const errorMess = ref("")
-if (session.value!.login) {
-  connected.value = true
-}
+
 
 
 let ws
@@ -54,7 +52,7 @@ function deleteMessage(id) {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
+      'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
     },
     body: {
       "message_id": idm
@@ -70,7 +68,7 @@ function ajouterMessage() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
+        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
       },
       body: {
         "contenu": message.value
@@ -92,7 +90,7 @@ function modifMessage(id) {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
+        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
       },
       body: {
         "contenu": modifmess.value,
@@ -138,7 +136,7 @@ onMounted(() => {
       <v-btn class="text-cyan-darken-1 ml-3 float-left" @click="toForum">
         Retour vers les forums
       </v-btn>
-      <v-btn class="mt-3 float-right mr-3 text-green-lighten-2" v-show="connected" @click="formMessage">ajouter un
+      <v-btn class="mt-3 float-right mr-3 text-green-lighten-2" v-show="connecter" @click="formMessage">ajouter un
         message
       </v-btn>
       <p>{{ error }}</p>
@@ -185,10 +183,10 @@ onMounted(() => {
       </v-card-text>
       <v-btn v-show="modif.modif && modif.id == d.id" @click="modifMessage(d.id)">
         Envoyer
-      </v-btn><v-btn v-show="connected && (session.user_id == d.auteur_id || session.admin)" @click="toggleModif(d.id)">
+      </v-btn><v-btn v-show="connecter && (user_id == d.auteur_id || admin)" @click="toggleModif(d.id)">
         modifier le message
       </v-btn>
-      <v-btn v-show="connected && session.admin" @click="deleteMessage(d.id)">supprimer le message</v-btn>
+      <v-btn v-show="connecter && admin" @click="deleteMessage(d.id)">supprimer le message</v-btn>
     </v-card>
     <v-pagination v-show="nbpage > 1" v-model="page" :length="nbpage" @click="fetchMessage"></v-pagination>
   </div>

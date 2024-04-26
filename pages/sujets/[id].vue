@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {connecter,admin,user_id,pseudo,mdp} from "~/app.vue";
 const route = useRoute()
 const idForum = ref(route.params.id)
 const data = ref()
@@ -6,10 +7,7 @@ const page = ref(1)
 const nbpage = ref()
 const error = ref("")
 const {session, refresh, update, reset} = await useSession()
-const connected = ref(false)
-if (session.value!.login) {
-  connected.value = true
-}
+
 let ws
 const connect = async () => {
   const isSecure = location.protocol === "https:";
@@ -42,7 +40,7 @@ function deleteSujet(id){
     method:'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
+      'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
     },
     body:{
       "sujet_id": ids
@@ -53,7 +51,7 @@ function deleteSujet(id){
 }
 
 function toNewSujet() {
-  if (connected.value) {
+  if (connecter.value) {
     navigateTo("/newSujet/" + idForum.value)
   } else {
     error.value = "Veuillez vous connecter"
@@ -106,7 +104,7 @@ onMounted(() => {
           {{ d.message_der_auteur }}
         </v-card-text>
       </router-link>
-      <v-btn v-show="connected && session.admin" @click="deleteSujet(d.id)">supprimer le sujet</v-btn>
+      <v-btn v-show="connecter && admin" @click="deleteSujet(d.id)">supprimer le sujet</v-btn>
     </v-card>
 
     <v-pagination v-show="nbpage > 1" v-model="page" :length="nbpage" @click="fetchSujet"></v-pagination>

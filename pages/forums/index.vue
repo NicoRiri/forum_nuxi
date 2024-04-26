@@ -1,15 +1,15 @@
 <script setup lang="ts">
+import {connecter,admin,user_id,pseudo,mdp} from "~/app.vue";
 const {session, refresh, update, reset} = await useSession()
 const data = ref()
 const page = ref(1)
 const nbpage = ref()
-const connected = ref(false)
 const newforum = ref(false)
+const modifforum = ref("")
+const modif = ref({modif: false, id: -1})
 const forum = ref("")
 const errorForum = ref("")
-if (session.value!.login) {
-  connected.value = true
-}
+
 
 let ws
 const connect = async () => {
@@ -48,7 +48,7 @@ function ajouterForum() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
+        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
       },
       body: {
         "nom": forum.value
@@ -64,21 +64,56 @@ function ajouterForum() {
 }
 
 
-function deleteForum(id){
+function deleteForum(id) {
   let idf = id.toString()
-  $fetch("/api/forums",{
-    method:'DELETE',
+  $fetch("/api/forums", {
+    method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
+      'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
     },
-    body:{
+    body: {
       "forum_id": idf
     }
-  }).then(() =>{
+  }).then(() => {
     ws.send("ping")
   })
 }
+
+function modifForum(id) {
+  let idf = id.toString()
+  if (modifforum.value !== "") {
+    $fetch("/api/forums", {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
+      },
+      body: {
+        "id": idf,
+        "nom": modifforum.value
+      }
+    }).then(() => {
+      ws.send("ping")
+      modifforum.value = ""
+      toggleModif(-1)
+    })
+  }
+}
+
+function toggleModif(id) {
+  if (modif.value.modif) {
+    modif.value.modif = false
+    modif.value.id = -1
+  }
+  else{
+    modif.value.modif = true
+    modif.value.id = id
+  }
+}
+
+
+
 
 onMounted(() => {
   fetchForums()
@@ -92,7 +127,7 @@ onMounted(() => {
 <template>
   <div class="mb-16">
     <h1>Forums</h1>
-    <v-btn class="mt-3 float-right mr-3 text-cyan-darken-1" v-show="session.admin" @click="formForum">Creer un forum
+    <v-btn class="mt-3 float-right mr-3 text-cyan-darken-1" v-show="admin" @click="formForum">Creer un forum
     </v-btn>
 
     <v-card class="mx-auto mt-13"
@@ -102,7 +137,7 @@ onMounted(() => {
             variant="text"
             v-show="newforum">
       <v-text-field placeholder="Nom du forum"
-                  v-model="forum">
+                    v-model="forum">
       </v-text-field>
       <v-btn width="100%"
              class="mr-3 text-cyan-darken-1"
@@ -118,11 +153,21 @@ onMounted(() => {
             max-width="360"
             rounded="xl"
             variant="text">
-      <router-link :to="'/sujets/'+d.id"
+      <v-text-field v-if="modif.modif && modif.id == d.id" :placeholder="d.name"
+                    class="text-cyan-accent-4"
+                    v-model="modifforum">
+      </v-text-field>
+      <router-link v-else :to="'/sujets/'+d.id"
                    class="text-decoration-none text-cyan-darken-1">
         <v-card-text class="text-h5 font-weight-black">{{ d.name }}</v-card-text>
       </router-link>
-      <v-btn v-show="connected && session.admin" @click="deleteForum(d.id)">supprimer le forum</v-btn>
+      <v-btn v-show="modif.modif && modif.id == d.id" @click="modifForum(d.id)">
+        Envoyer
+      </v-btn>
+      <v-btn v-show="connecter && admin" @click="toggleModif(d.id)">
+        modifier le forum
+      </v-btn>
+      <v-btn v-show="connecter && admin" @click="deleteForum(d.id)">supprimer le forum</v-btn>
     </v-card>
 
     <v-pagination v-show="nbpage > 1" v-model="page" :length="nbpage" @click="fetchForums"></v-pagination>

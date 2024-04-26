@@ -92,6 +92,9 @@ onMounted(() => {
             variant="text">
       <router-link :to="'/message/'+d.id"
                    class="text-decoration-none text-deep-orange-darken-2">
+        <v-card-title>
+          {{d.nom}}
+        </v-card-title>
         <v-card-text class="pb-0">
           Auteur du sujet :
           {{ d.auteur }}

@@ -28,6 +28,7 @@ const connect = async () => {
 async function fetchForums() {
   await $fetch("/api/forums/" + page.value).then((response) => {
     data.value = response
+    console.log(response)
   })
 }
 
@@ -160,6 +161,7 @@ onMounted(() => {
       <router-link v-else :to="'/sujets/'+d.id"
                    class="text-decoration-none text-cyan-darken-1">
         <v-card-text class="text-h5 font-weight-black">{{ d.name }}</v-card-text>
+        <v-card-text class="text-h6 font-weight-black">{{ d.sujetNb }} sujets</v-card-text>
       </router-link>
       <v-btn v-show="modif.modif && modif.id == d.id" @click="modifForum(d.id)">
         Envoyer

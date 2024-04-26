@@ -1,7 +1,33 @@
 <script setup lang="ts">
-
+const route = useRoute()
+const idForum = ref(route.params.id)
+const error = ref("")
 const titre = ref("")
 const message = ref("")
+const {session, update, refresh, reset} = await useSession()
+
+async function postSujet() {
+  if (titre.value != "" && message.value != "") {
+    await $fetch("/api/sujets/" + idForum.value, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
+      },
+      body: {
+        "nom": titre.value,
+        "message_initial": message.value
+      }
+    })
+    navigateTo("/sujets/" + idForum.value)
+  } else {
+    error.value = "Il faut remplir tout les champs"
+  }
+}
+
+onMounted(() => {
+  refresh()
+})
 
 </script>
 
@@ -10,7 +36,11 @@ const message = ref("")
     <h1>
       Nouveau Sujet
     </h1>
-
+    <router-link :to="'/sujets/'+idForum" class="float-left">
+      <v-btn class="text-deep-orange-darken-2 ml-3">
+        Retour vers les sujets
+      </v-btn>
+    </router-link>
     <v-card class="mx-auto mt-13"
             border="opacity-50 sm"
             max-width="600"
@@ -23,10 +53,12 @@ const message = ref("")
                   v-model="message">
       </v-textarea>
       <v-btn width="100%"
-             class="mr-3 text-deep-orange-darken-2">
+             class="mr-3 text-deep-orange-darken-2"
+             @click="postSujet">
         Creer un nouveau sujet
       </v-btn>
     </v-card>
+    <p class="error">{{ error }}</p>
   </div>
 </template>
 
@@ -37,5 +69,12 @@ h1 {
   font-size: 50px;
   text-align: center;
   margin-top: 50px;
+}
+
+.error {
+  color: red;
+  font-size: 20px;
+  margin-top: 10px;
+  text-align: center;
 }
 </style>

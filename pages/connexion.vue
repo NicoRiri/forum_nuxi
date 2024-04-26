@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+import {connected} from "~/app.vue";
+
 const login = ref('')
 const password = ref('')
 const error = ref('')
@@ -17,12 +19,17 @@ function connexion() {
       'Authorization': 'Basic ' + btoa(login.value + ':' + password.value)
     }
   }).then(async (response) => {
-    if (response.ok) {
-      const data = await response.json()
-      update(data)
+    if (response.message === "connecté") {
+      await update({
+        "login": login.value,
+        "password": password.value,
+        "admin": response.admin,
+        "user_id": response.id
+      })
+      connected()
       navigateTo('/forums')
     } else {
-      error.value = "Login ou mot de passe incorrect"
+      error.value = response.message
     }
   }).catch(() => {
     error.value = "Erreur lors de la connexion"
@@ -66,7 +73,6 @@ h1 {
   font-size: 20px;
   margin-top: 10px;
 }
-
 p{
   margin-bottom: 10px;
   text-align: center;

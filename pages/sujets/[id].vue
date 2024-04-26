@@ -7,10 +7,22 @@ const nbpage = ref()
 const error = ref("")
 const {session, refresh, update, reset} = await useSession()
 const connected = ref(false)
-if (session.value!.userid) {
+if (session.value!.login) {
   connected.value = true
 }
-
+let ws
+const connect = async () => {
+  const isSecure = location.protocol === "https:";
+  const url = (isSecure ? "wss://" : "ws://") + location.host + "/_ws";
+  if (ws) {
+    ws.close();
+  }
+  ws = new WebSocket(url);
+  ws.addEventListener("message", (event) => {
+    fetchSujet()
+  });
+  await new Promise((resolve) => ws.addEventListener("open", resolve));
+};
 
 function fetchSujet() {
   $fetch("/api/sujets/" + idForum.value + "/" + page.value).then((response) => {
@@ -24,9 +36,25 @@ function fetchNbPage(){
   })
 }
 
+function deleteSujet(id){
+  let ids = id.toString()
+  $fetch("/api/sujets",{
+    method:'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
+    },
+    body:{
+      "sujet_id": ids
+    }
+  }).then(() =>{
+    ws.send("ping")
+  })
+}
+
 function toNewSujet() {
   if (connected.value) {
-    navigateTo("/newSujet/" + idForum)
+    navigateTo("/newSujet/" + idForum.value)
   } else {
     error.value = "Veuillez vous connecter"
   }
@@ -35,12 +63,14 @@ function toNewSujet() {
 onMounted(() => {
   fetchSujet()
   fetchNbPage()
+  refresh()
+  connect()
 })
 
 </script>
 
 <template>
-  <div>
+  <div class="mb-16">
     <h1>Sujets</h1>
     <router-link to="/forums">
       <v-btn class="text-cyan-darken-1 ml-3">
@@ -56,7 +86,7 @@ onMounted(() => {
       </p>
     </div>
     <v-card v-for="d in data"
-            class="text-center mt-8  mx-auto mb-5"
+            class="text-center mt-10  mx-auto"
             border="opacity-50 sm"
             max-width="360"
             rounded="xl"
@@ -76,6 +106,7 @@ onMounted(() => {
           {{ d.message_der_auteur }}
         </v-card-text>
       </router-link>
+      <v-btn v-show="connected && session.admin" @click="deleteSujet(d.id)">supprimer le sujet</v-btn>
     </v-card>
 
     <v-pagination v-show="nbpage > 1" v-model="page" :length="nbpage" @click="fetchSujet"></v-pagination>

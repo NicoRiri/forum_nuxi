@@ -1,11 +1,11 @@
 <script setup lang="ts">
-
+import {connecter,admin,user_id,pseudo,mdp} from "~/app.vue";
 const login = ref('')
 const password = ref('')
 const error = ref('')
 const {session, update, refresh, reset} = await useSession()
 
-function connexion() {
+function inscription() {
   if (!login.value || !password.value) {
     error.value = "Veuillez remplir tous les champs"
     return
@@ -17,12 +17,19 @@ function connexion() {
       'Authorization': 'Basic ' + btoa(login.value + ':' + password.value)
     }
   }).then(async (response) => {
-    if (response.ok) {
-      const data = await response.json()
-      update(data)
+    if (response.message === "le compte a bien été créé") {
+      await update({
+        "login": login.value,
+        "password": password.value
+      })
+      user_id.value = response.id
+      mdp.value = password.value
+      pseudo.value = login.value
+      admin.value = response.admin
+      connecter.value = true
       navigateTo('/forums')
     } else {
-      error.value = "Login ou mot de passe incorrect"
+      error.value = response.message
     }
   }).catch(() => {
     error.value = "Erreur lors de l'incription"
@@ -40,7 +47,7 @@ function connexion() {
       <v-text-field v-model="login" label="Login" required></v-text-field>
       <v-text-field v-model="password" label="Mot de passe" type="password" required></v-text-field>
 
-      <v-btn @click="connexion">S'inscrire</v-btn>
+      <v-btn @click="inscription">S'inscrire</v-btn>
       <p>{{ error }}</p>
     </div>
 

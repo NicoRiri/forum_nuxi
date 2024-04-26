@@ -1,12 +1,41 @@
+<script lang="ts">
+
+export const connecter = ref(false)
+export const admin = ref(false)
+export const user_id = ref(-1)
+export const pseudo = ref("")
+export const mdp = ref("")
+
+</script>
+
 <script setup lang="ts">
+
 
 const {session, update, refresh, reset} = await useSession()
 
 
 function deconnexion() {
   reset()
+  connecter.value = false
+  admin.value = false
   navigateTo('/forums')
 }
+
+async function refreshSession(){
+  await refresh()
+  if(session.value.login){
+    connecter.value = true
+  }
+  console.log(session.value)
+    setTimeout(()=>{
+      console.log(session.value)
+      refreshSession()
+    },50000)
+}
+
+onMounted(() => {
+  refresh()
+})
 
 </script>
 
@@ -14,9 +43,17 @@ function deconnexion() {
   <div>
 
     <div class="header">
-      <v-btn v-if="!session.value" to="/connexion">Connexion</v-btn>
-      <v-btn v-else @click="deconnexion">Deconnexion</v-btn>
-      <router-link to="/forums" class="title">Le Pticoin</router-link>
+      <router-link to="/forums" class="text-decoration-none text-black text-h3 titre">Le Pticoin</router-link>
+      <v-btn v-if="!connecter" to="/connexion" class="bouton">Connexion</v-btn>
+      <div v-else class="bouton">
+        <router-link to="/admin">
+          <v-btn v-if="admin" class="mr-3">Creer un compte admin</v-btn>
+        </router-link>
+        <router-link to="/profil">
+          <v-btn>Profil</v-btn>
+        </router-link>
+        <v-btn @click="deconnexion" class="ml-3">Deconnexion</v-btn>
+      </div>
 
     </div>
 
@@ -33,17 +70,12 @@ function deconnexion() {
   text-align: center;
 }
 
-.v-btn{
+.bouton {
   position: absolute;
   right: 20px;
 }
 
-.title{
-  text-decoration: none;
-  color: black;
-  font-size: 30px;
-  margin-right: auto;
-  margin-left: auto;
-  font-family: Arial, sans-serif;
+.titre {
+  margin: 0 auto;
 }
 </style>

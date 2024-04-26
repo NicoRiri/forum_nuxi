@@ -2,25 +2,30 @@
 import vuetify, {transformAssetUrls} from "vite-plugin-vuetify";
 
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-  build: {
-    transpile: ['vuetify'],
-  },
-  modules: [
-    (_options, nuxt) => {
-      nuxt.hooks.hook('vite:extendConfig', (config) => {
-        // @ts-expect-error
-        config.plugins.push(vuetify({autoImport: true}))
-      })
+    devtools: {enabled: true},
+    build: {
+        transpile: ['vuetify'],
     },
-    '@sidebase/nuxt-session',
-      "nuxt-server-utils"
-  ],
+    modules: [
+        (_options, nuxt) => {
+            nuxt.hooks.hook('vite:extendConfig', (config) => {
+                // @ts-expect-error
+                config.plugins.push(vuetify({autoImport: true}))
+            })
+        },
+        '@sidebase/nuxt-session',
+        "nuxt-server-utils"
+    ],
     vite: {
-  vue: {
-    template: {
-      transformAssetUrls,
+        vue: {
+            template: {
+                transformAssetUrls,
+            },
+        },
     },
-  },
-},
+    nitro: {
+        experimental: {
+            websocket: true
+        }
+    }
 })

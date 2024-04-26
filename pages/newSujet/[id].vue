@@ -7,6 +7,18 @@ const titre = ref("")
 const message = ref("")
 const {session, update, refresh, reset} = await useSession()
 
+
+let ws
+const connect = async () => {
+  const isSecure = location.protocol === "https:";
+  const url = (isSecure ? "wss://" : "ws://") + location.host + "/_ws";
+  if (ws) {
+    ws.close();
+  }
+  ws = new WebSocket(url);
+  await new Promise((resolve) => ws.addEventListener("open", resolve));
+};
+
 async function postSujet() {
   if (titre.value != "" && message.value != "") {
     await $fetch("/api/sujets/" + idForum.value, {
@@ -19,8 +31,12 @@ async function postSujet() {
         "nom": titre.value,
         "message_initial": message.value
       }
+    }).then(() => {
+      ws.send("ping")
+      ws.close()
+      navigateTo("/sujets/" + idForum.value)
     })
-    navigateTo("/sujets/" + idForum.value)
+    
   } else {
     error.value = "Il faut remplir tout les champs"
   }

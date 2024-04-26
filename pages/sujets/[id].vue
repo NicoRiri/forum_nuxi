@@ -52,6 +52,7 @@ function deleteSujet(id){
 
 function toNewSujet() {
   if (connecter.value) {
+    ws.close()
     navigateTo("/newSujet/" + idForum.value)
   } else {
     error.value = "Veuillez vous connecter"

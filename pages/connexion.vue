@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {connecter,admin,user_id,pseudo,mdp} from "~/app.vue";
+import {connecter,admin} from "~/app.vue";
 
 const login = ref('')
 const password = ref('')
@@ -26,9 +26,6 @@ function connexion() {
         "admin": response.admin,
         "user_id": response.id
       })
-      user_id.value = response.id
-      mdp.value = password.value
-      pseudo.value = login.value
       admin.value = response.admin
       connecter.value = true
       navigateTo('/forums')

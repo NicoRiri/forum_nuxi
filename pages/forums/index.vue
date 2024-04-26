@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {connecter,admin,user_id,pseudo,mdp} from "~/app.vue";
+import {connecter,admin} from "~/app.vue";
 const {session, refresh, update, reset} = await useSession()
 const data = ref()
 const page = ref(1)
@@ -48,7 +48,7 @@ function ajouterForum() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
+        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
       },
       body: {
         "nom": forum.value
@@ -70,7 +70,7 @@ function deleteForum(id) {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
+      'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
     },
     body: {
       "forum_id": idf
@@ -87,7 +87,7 @@ function modifForum(id) {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
+        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
       },
       body: {
         "id": idf,

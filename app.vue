@@ -2,9 +2,6 @@
 
 export const connecter = ref(false)
 export const admin = ref(false)
-export const user_id = ref(-1)
-export const pseudo = ref("")
-export const mdp = ref("")
 
 </script>
 
@@ -21,20 +18,13 @@ function deconnexion() {
   navigateTo('/forums')
 }
 
-async function refreshSession(){
-  await refresh()
-  if(session.value.login){
-    connecter.value = true
-  }
-  console.log(session.value)
-    setTimeout(()=>{
-      console.log(session.value)
-      refreshSession()
-    },50000)
-}
 
 onMounted(() => {
   refresh()
+  if(session.value.login){
+    connecter.value = true
+    admin.value = session.value.admin
+  }
 })
 
 </script>

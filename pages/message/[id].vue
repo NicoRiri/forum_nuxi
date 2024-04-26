@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {connecter,admin,user_id,pseudo,mdp} from "~/app.vue";
+import {connecter,admin} from "~/app.vue";
 const route = useRoute()
 const idSujet = ref(route.params.id)
 const data = ref()
@@ -52,7 +52,7 @@ function deleteMessage(id) {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
+      'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
     },
     body: {
       "message_id": idm
@@ -68,7 +68,7 @@ function ajouterMessage() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
+        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
       },
       body: {
         "contenu": message.value
@@ -90,7 +90,7 @@ function modifMessage(id) {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
+        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
       },
       body: {
         "contenu": modifmess.value,
@@ -183,7 +183,7 @@ onMounted(() => {
       </v-card-text>
       <v-btn v-show="modif.modif && modif.id == d.id" @click="modifMessage(d.id)">
         Envoyer
-      </v-btn><v-btn v-show="connecter && (user_id == d.auteur_id || admin)" @click="toggleModif(d.id)">
+      </v-btn><v-btn v-show="connecter && (session.user_id == d.auteur_id || admin)" @click="toggleModif(d.id)">
         modifier le message
       </v-btn>
       <v-btn v-show="connecter && admin" @click="deleteMessage(d.id)">supprimer le message</v-btn>

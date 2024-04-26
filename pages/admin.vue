@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {connecter,admin,user_id,pseudo,mdp} from "~/app.vue";
+import {connecter,admin} from "~/app.vue";
 const {session, update, refresh, reset} = await useSession()
 const login = ref("")
 const mdp1 = ref("")
@@ -12,7 +12,7 @@ function postAdmin() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
+        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
       },
       body: {
         "nom": login.value,

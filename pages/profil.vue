@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {connecter,admin,user_id,pseudo,mdp} from "~/app.vue";
+import {connecter,admin} from "~/app.vue";
 const {session, update, refresh, reset} = await useSession()
 const changemdp = ref(false)
 const newmdp1 = ref("")
@@ -15,13 +15,15 @@ function postMDP(){
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
+        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
       },
       body:{
         "password": newmdp1.value
       }
     }).then(() => {
-      mdp.value = newmdp1.value
+      update({
+        "password": newmdp1.value
+      })
       navigateTo("/forums")
     })
   }

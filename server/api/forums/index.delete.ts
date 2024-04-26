@@ -38,15 +38,15 @@ export default defineEventHandler(async (event) => {
     //Vérifier qu'il existe / mot de passe est bon
     const [user] = await conn.execute("SELECT * FROM Users WHERE nom = ?", [login])
 
-    const admin_v = user[0].admin
-    const admin_buffer = Buffer.from(admin_v)
-    const admin_boolean = Boolean(admin_buffer.readInt8())
-
     //Le compte n'existe pas
     if (user.length === 0) {
         setResponseStatus(event, 401)
         return ({status: 1, error: "Login ou mot de passe incorrect"})
     }
+
+    const admin_v = user[0].admin
+    const admin_buffer = Buffer.from(admin_v)
+    const admin_boolean = Boolean(admin_buffer.readInt8())
 
 
     const resCompareUser = await compare(password, user[0].password)

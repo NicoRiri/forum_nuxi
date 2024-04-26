@@ -48,6 +48,12 @@ export default defineEventHandler(async (event) => {
     const admin_buffer = Buffer.from(admin_v)
     const admin_boolean = Boolean(admin_buffer.readInt8())
 
+    if (!admin_boolean){
+        setResponseStatus(event, 401)
+        return ({status: 1, error: "Pas la permission de modifier le nom d'un forum"})
+    }
+
+
     const resCompareUser = await compare(password, user[0].password)
 
     if (!resCompareUser) {
@@ -55,6 +61,7 @@ export default defineEventHandler(async (event) => {
         return ({status: 1, error: "Login ou mot de passe incorrect"})
     }
 
+    //Vérifier si sujet existe
     const body = await readBody(event)
 
     if (body === undefined){
@@ -62,25 +69,32 @@ export default defineEventHandler(async (event) => {
         return ({status: 1, error: "Body vide"})
     }
 
-    if (body.message_id === undefined){
+    if (body.nom === undefined){
         setResponseStatus(event, 401)
-        return ({status: 1, error: "message null"})
+        return ({status: 1, error: "Nom null"})
     }
 
-    const mIdWoSpace = body.message_id.replace(/\s/g, '')
-
-
-    if (mIdWoSpace.length === 0){
+    if (body.id === undefined){
         setResponseStatus(event, 401)
-        return ({status: 1, error: "message Vide"})
+        return ({status: 1, error: "id null"})
     }
 
-    if (admin_boolean){
-        await conn.execute("DELETE FROM Messages WHERE id = ?", [body.message_id])
-        setResponseStatus(event, 200)
-        return ({status: 0, error: "Le message a bien été supprimé"})
-    } else {
+    const nomWoSpace = body.nom.replace(/\s/g, '')
+    const idWoSpace = body.id.replace(/\s/g, '')
+
+
+    if (nomWoSpace.length === 0){
         setResponseStatus(event, 401)
-        return ({status: 1, error: "Pas la permission de supprimer un message"})
+        return ({status: 1, error: "Nom vide"})
     }
+
+    if (idWoSpace.length === 0){
+        setResponseStatus(event, 401)
+        return ({status: 1, error: "Id vide"})
+    }
+
+    await conn.execute("UPDATE Forums SET name = ? WHERE id = ?", [body.nom, body.id])
+
+    setResponseStatus(event, 200)
+    return ({status: 0, message: "Forum modifié avec succès"})
 })

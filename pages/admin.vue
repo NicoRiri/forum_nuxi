@@ -29,9 +29,9 @@ function postAdmin() {
 
 <template>
   <div class="form">
-    <v-text-field v-model="login" label="Login" required></v-text-field>
-    <v-text-field v-model="mdp1" label="Mot de passe" type="password" required></v-text-field>
-    <v-text-field v-model="mdp2" label="Confirmer mot de passe" type="password" required></v-text-field>
+    <v-text-field v-model="login" label="Login"></v-text-field>
+    <v-text-field v-model="mdp1" label="Mot de passe" type="password"></v-text-field>
+    <v-text-field v-model="mdp2" label="Confirmer mot de passe" type="password"></v-text-field>
 
     <v-btn @click="postAdmin">Creer le compte</v-btn>
     <p class="error">{{ error }}</p>

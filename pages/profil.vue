@@ -22,7 +22,7 @@ function postMDP(){
       }
     }).then(() => {
       mdp.value = newmdp1.value
-      navigateTo("/profil")
+      navigateTo("/forums")
     })
   }
 }
@@ -42,8 +42,8 @@ onMounted(() =>{
   <v-card-title>
   Pseudo : {{session.login}}
   </v-card-title>
-  <v-text-field v-show="changemdp" placeholder="Nouveau mot de passe" v-model="newmdp1"></v-text-field>
-  <v-text-field v-show="changemdp" placeholder="Confiramtion du mot de passe" v-model="newmdp2"></v-text-field>
+  <v-text-field v-show="changemdp" placeholder="Nouveau mot de passe" v-model="newmdp1" type="password"></v-text-field>
+  <v-text-field v-show="changemdp" placeholder="Confiramtion du mot de passe" v-model="newmdp2" type="password"></v-text-field>
   <v-btn class="w-100" @click="postMDP" v-show="changemdp">Enregistrer le nouveau mot de passe</v-btn>
   <v-btn class="w-100" @click="changeMdp" v-show="!changemdp">changer le mot de passe</v-btn>
 </v-card>

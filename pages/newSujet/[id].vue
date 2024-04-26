@@ -44,6 +44,7 @@ async function postSujet() {
 
 onMounted(() => {
   refresh()
+  connect()
 })
 
 </script>

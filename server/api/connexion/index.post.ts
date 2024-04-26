@@ -36,6 +36,12 @@
           const conn = await connection
 
           const [passwordBdd] = await conn.execute("SELECT id, password, admin FROM Users WHERE nom = ?", [login])
+
+          if (passwordBdd.length === 0){
+               setResponseStatus(event, 401)
+               return ({status: 1, error: "Mot de passe ou login incorrecte"})
+          }
+
           // @ts-ignore
           const res = await compare(password, passwordBdd[0].password)
           if(res){
@@ -51,6 +57,7 @@
           } else {
                setResponseStatus(event, 401)
                return {
+                    "status": 0,
                     "message" : "Mot de passe ou login incorrecte"
                }
           }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {connecter,admin,user_id,pseudo,mdp} from "~/app.vue";
+import {connecter,admin} from "~/app.vue";
 const {session, update, refresh, reset} = await useSession()
 const login = ref("")
 const mdp1 = ref("")
@@ -12,7 +12,7 @@ function postAdmin() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
+        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
       },
       body: {
         "nom": login.value,
@@ -29,9 +29,9 @@ function postAdmin() {
 
 <template>
   <div class="form">
-    <v-text-field v-model="login" label="Login" required></v-text-field>
-    <v-text-field v-model="mdp1" label="Mot de passe" type="password" required></v-text-field>
-    <v-text-field v-model="mdp2" label="Confirmer mot de passe" type="password" required></v-text-field>
+    <v-text-field v-model="login" label="Login"></v-text-field>
+    <v-text-field v-model="mdp1" label="Mot de passe" type="password"></v-text-field>
+    <v-text-field v-model="mdp2" label="Confirmer mot de passe" type="password"></v-text-field>
 
     <v-btn @click="postAdmin">Creer le compte</v-btn>
     <p class="error">{{ error }}</p>

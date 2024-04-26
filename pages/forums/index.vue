@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {connecter,admin,user_id,pseudo,mdp} from "~/app.vue";
+import {connecter,admin} from "~/app.vue";
 const {session, refresh, update, reset} = await useSession()
 const data = ref()
 const page = ref(1)
@@ -28,6 +28,7 @@ const connect = async () => {
 async function fetchForums() {
   await $fetch("/api/forums/" + page.value).then((response) => {
     data.value = response
+    console.log(response)
   })
 }
 
@@ -48,7 +49,7 @@ function ajouterForum() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
+        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
       },
       body: {
         "nom": forum.value
@@ -70,7 +71,7 @@ function deleteForum(id) {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
+      'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
     },
     body: {
       "forum_id": idf
@@ -87,7 +88,7 @@ function modifForum(id) {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(pseudo.value + ':' + mdp.value)
+        'Authorization': 'Basic ' + btoa(session.value.login + ':' + session.value.password)
       },
       body: {
         "id": idf,
@@ -160,6 +161,7 @@ onMounted(() => {
       <router-link v-else :to="'/sujets/'+d.id"
                    class="text-decoration-none text-cyan-darken-1">
         <v-card-text class="text-h5 font-weight-black">{{ d.name }}</v-card-text>
+        <v-card-text class="text-h6 font-weight-black">{{ d.sujetNb }} sujets</v-card-text>
       </router-link>
       <v-btn v-show="modif.modif && modif.id == d.id" @click="modifForum(d.id)">
         Envoyer
